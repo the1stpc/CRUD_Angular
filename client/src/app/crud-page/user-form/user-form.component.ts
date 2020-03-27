@@ -27,9 +27,7 @@ export class UserFormComponent implements OnInit {
   now = moment(Date.now()).format('YYYY-MM-DD')
   userFormTitle
   regMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
-
-
-  public mask = ['+', '7', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]
+  mask = ['+', '7', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]
 
   constructor(private formBuilder: FormBuilder, private UserService: UsersService, public toastService: ToastService) {
   }
@@ -61,7 +59,8 @@ export class UserFormComponent implements OnInit {
       this.submitted = true;
       return;
     }
-    obs$ = this.UserService[this.throwUser ? 'update' : 'create'](this.userForm.value, this.image, this.throwUser._id);
+    obs$ = this.throwUser ? this.UserService.update(this.userForm.value, this.image, this.throwUser._id) : this.UserService.create(this.userForm.value, this.image)
+
     obs$.subscribe(
       user => {
         this.user = user

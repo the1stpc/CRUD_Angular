@@ -18,7 +18,7 @@ export class UsersService {
   }
 
 
-  create(form: IUser, imageSrc: File, id?): Observable<IUser> {
+  create(form: IUser, imageSrc: File): Observable<IUser> {
     const fd = new FormData();
 
     if (imageSrc) {

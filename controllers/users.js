@@ -64,6 +64,7 @@ module.exports.create = async function (req, res) {
 
 module.exports.update = async function (req, res) {
     const updated = {
+        email: req.body.email,
         firstName: req.body.firstName,
         phone: req.body.phone,
         birthday: req.body.birthday,

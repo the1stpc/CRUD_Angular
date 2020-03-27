@@ -1,0 +1,102 @@
+<div class="card m-3">
+  <h5 class="card-header text-center">{{userFormTitle}}пользователя</h5>
+  <div class="card-body">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-2">
+            <div class="form-row">
+              <label>Email</label>
+              <input type="text" formControlName="email" class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Обязательное поле</div>
+                <div *ngIf="f.email.errors.pattern">Введите корректную почту</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Имя</label>
+              <input type="text" formControlName="firstName" class="form-control"
+                     [ngClass]="{ 'is-invalid': f.firstName.dirty && f.firstName.errors }"/>
+              <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                <div *ngIf="f.firstName.errors.required">Введите имя</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Телефон</label>
+              <input type="text" formControlName="phone" class="form-control" [textMask]="{mask: mask}"
+                     [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"/>
+              <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                <div *ngIf="f.phone.errors.required">Обязательное поле</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="form-row">
+              <label>Дата рождения</label>
+              <input type="date" formControlName="birthday" class="form-control" [max]="now"
+                     [ngClass]="{ 'is-invalid': submitted && f.birthday.errors }"/>
+              <div *ngIf="submitted && f.birthday.errors" class="invalid-feedback">
+                <div *ngIf="f.birthday.errors.required">Укажите дату рождения</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Пол</label>
+              <select formControlName="gender" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.gender.errors }">
+                <option [ngValue]="undefined" selected></option>
+                <option [ngValue]="genders.FEMALE">женский</option>
+                <option [ngValue]="genders.MALE">мужской</option>
+              </select>
+              <div *ngIf="f.gender.dirty && f.gender.errors" class="invalid-feedback">
+                <div *ngIf="f.gender.errors.required">Выбирите пол</div>
+              </div>
+            </div>
+            <div class="form-row ml-3 mt-5">
+              <input type="checkbox" formControlName="mailing" id="mailing" class="form-check-input"/>
+              <label for="mailing" class="form-check-label">Получать рассылку</label>
+            </div>
+          </div>
+          <div class="form-group col">
+            <div class="form-row mt-4">
+              <input
+                type="file"
+                class="d-none"
+                accept="image/jpeg,image/jpg"
+                (change)="onFileUpload($event)"
+                #input
+              >
+              <div class="form-row align-content-center">
+                <button
+                  (click)="triggerClick()"
+                  [disabled]="f.disabled"
+                  class="btn btn-dark"
+                  type="button"
+                >
+                  Загрузить изображение
+                </button>
+              </div>
+            </div>
+            <div class="form-row">
+              <img
+                [src]="imagePreview"
+                alt=""
+                class="imgSize"
+                *ngIf="imagePreview"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-secondary mr-1" type="reset" (click)="onReset()">Отмена</button>
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<app-toast aria-live="polite" aria-atomic="true"></app-toast>
+

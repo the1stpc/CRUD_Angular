@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <h1 class="text-center">CRUD table</h1>
+
+  <div class="row" *ngIf="users$ | async as users; else loader">
+    <div class="container-fluid">
+      <div class="row" *ngIf="users.length !== 0">
+        <div class="col">
+          <div class="form-group">
+            <label>Возраст</label>
+            <select class="custom-select" [(ngModel)]="filterList.age.value">
+              <option selected [ngValue]="undefined"></option>
+              <option [ngValue]="eAgeType.CHILD">меньше 18</option>
+              <option [ngValue]="eAgeType.ADULT">больше 18</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Рассылка</label>
+            <select class="custom-select" [(ngModel)]="filterList.mailing.value">
+              <option selected [ngValue]="undefined"></option>
+              <option [ngValue]="true">подписан</option>
+              <option [ngValue]="false">не подписан</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Пол</label>
+            <select class="custom-select" [(ngModel)]="filterList.gender.value">
+              <option selected [ngValue]="undefined"></option>
+              <option [ngValue]="eGender.FEMALE">женский</option>
+              <option [ngValue]="eGender.MALE">мужской</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table table-hover border" *ngIf="users.length !== 0; else empty">
+      <thead>
+      <tr>
+        <th scope="col">Фото</th>
+        <th scope="col">Email</th>
+        <th scope="col">Имя</th>
+        <th scope="col">Телефон</th>
+        <th scope="col">Дата рождения</th>
+        <th scope="col">Пол</th>
+        <th scope="col">Подписан</th>
+        <th scope="col">Управление</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users | filter: filterAge | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize;  ">
+        <td><img [src]="user.imageSrc" class="img-th" alt=""></td>
+        <td>{{user.email}}</td>
+        <td>{{user.firstName}}</td>
+        <td>{{user.phone}}</td>
+        <td>{{user.birthday}}</td>
+        <td>{{user.gender == 'male' ? 'мужской' : 'женский'}}</td>
+        <td>{{user.mailing == true ? 'да' : 'нет'}}</td>
+        <td>
+          <button type="button" class="btn btn-warning m-1" (click)="changeUser(content ,user)">Изменить</button>
+          <button type="button" class="btn btn-danger m-1" (click)="deleteUser(user._id)">Удалить</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      *ngIf="users.length !== 0"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [collectionSize]="(users | filter: filterAge).length"
+      [boundaryLinks]="true"
+      [maxSize]="5"
+    ></ngb-pagination>
+  </div>
+</div>
+
+<ng-template #loader>
+  <app-loader></app-loader>
+</ng-template>
+
+<ng-template #empty>
+  <div class="container"><h2 class="text-center">Нет ни одного пользователя</h2></div>
+</ng-template>
+
+<ng-template #content>
+  <app-user-form [throwUser]="throwUser" [closeModal]="closeModalFunc"></app-user-form>
+</ng-template>
+
+<app-toast aria-live="polite" aria-atomic="true"></app-toast>
+
+
